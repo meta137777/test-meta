@@ -1,0 +1,108 @@
+import {
+  FormControl,
+  FormHelperText,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
+
+export const FormInput = ({
+  changeHandler,
+  formik,
+  name,
+  label,
+  placeholder,
+  type,
+  showEndAdorMent,
+  showEndAdorMentValue,
+  classes,
+  classNames,
+  defaultValue,
+  hint,
+  disabled = false,
+}: any) => {
+  return (
+    <FormControl
+      className={`relative h-fit ${classNames}`}
+      sx={{
+        label: {
+          color: "#1242E0",
+          fontSize: "14px",
+          padding: "0 32px 0 0",
+          background: "#fff",
+          fontFamily: "IranSans",
+        },
+      }}
+    >
+      <TextField
+        autoComplete="off"
+        inputProps={{
+          style: {
+            height: "10px",
+          },
+        }}
+        disabled={disabled}
+        error={formik?.errors[name] && formik?.touched[name] ? true : false}
+        sx={{
+          ".MuiInputBase-root": { borderRadius: "3px", fontSize: "12px" },
+          fontSize: "14px",
+        }}
+        className={`${classes} form-inp`}
+        variant="outlined"
+        fullWidth
+        value={formik?.values[name]}
+        label={label}
+        name={name}
+        type={type}
+        onChange={formik ? formik.handleChange : changeHandler}
+        {...formik?.getFieldProps({ name })}
+        defaultValue={defaultValue ? defaultValue : formik?.values[name]}
+        placeholder={placeholder}
+        InputProps={{
+          startAdornment: <></>,
+          endAdornment: showEndAdorMent && (
+            <InputAdornment position="end">
+              <span className="text-xs">{showEndAdorMentValue}</span>
+            </InputAdornment>
+          ),
+        }}
+      />
+
+      {!formik?.errors[name] && (
+        <FormHelperText className="p-0 absolute -bottom-5">
+          {hint &&
+            (formik?.values.price !== null || formik?.values.price !== 0) && (
+              <span>
+                {formik?.values.price
+                  ?.toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                میلیون تومان
+              </span>
+            )}
+        </FormHelperText>
+      )}
+
+      {formik?.errors[name] && formik?.touched[name] && (
+        <FormHelperText
+          className="p-0"
+          sx={{
+            marginLeft: 0,
+            fontFamily: "IranSans",
+            marginRight: 0,
+            textAlign: "right",
+            color: "#D90201",
+          }}
+        >
+          {formik?.errors[name]}
+        </FormHelperText>
+      )}
+    </FormControl>
+  );
+};
+
+FormInput.defaultProps = {
+  type: "text",
+  showEndAdorMent: false,
+  classes: "bg-white",
+  defaultValue: "",
+  hint: false,
+};
